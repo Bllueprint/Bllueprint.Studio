@@ -48,6 +48,27 @@
       }
     },
     {
+      "label": "Build Electron",
+      "type": "shell",
+      "command": "npm run build",
+      "options": {
+        "cwd": "${workspaceFolder}/bllueprint-desktop",
+        "shell": {
+          "executable": "cmd.exe",
+          "args": [
+            "/d",
+            "/c"
+          ]
+        }
+      },
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "problemMatcher": "$tsc"
+    },
+    {
       "label": "Build Desktop",
       "type": "shell",
       "command": "npm run dist:win",

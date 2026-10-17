@@ -1,0 +1,26 @@
+<div class="workspace">
+  <app-workspace-tab-strip class="workspace__tabs" />
+
+  <div class="workspace__content">
+    @for (tab of workspaceTabs.tabs(); track tab.id) {
+      <section
+        class="workspace__pane"
+        role="tabpanel"
+        [class.workspace__pane--active]="tab.id === workspaceTabs.activeTabId()"
+        [attr.aria-hidden]="tab.id !== workspaceTabs.activeTabId()"
+      >
+        @switch (tab.kind) {
+          @case ('home') {
+            <app-home-page />
+          }
+          @case ('editor') {
+            <app-coding-page />
+          }
+          @case ('playground') {
+            <app-playground-page />
+          }
+        }
+      </section>
+    }
+  </div>
+</div>

@@ -1,0 +1,26 @@
+.workbench {
+  display: grid;
+  grid-template-rows: 38px 1fr;
+  height: 100%;
+  background-color: var(--background);
+  background-image: var(--sketch-paper-pattern);
+  background-size: var(--sketch-paper-pattern-size);
+}
+
+.workbench__tabs {
+  min-width: 0;
+}
+
+.workbench__editor {
+  overflow: hidden;
+  position: relative;
+}
+
+.workbench__placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--muted-foreground);
+  font-size: 13px;
+}

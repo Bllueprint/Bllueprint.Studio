@@ -2,10 +2,23 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <!--
+      Content-Security-Policy for the renderer (browser and Electron).
+      - script-src 'self': no inline scripts; the theme bootstrap is public/theme-init.js.
+      - style-src allows inline styles because Angular and Monaco inject them.
+      - worker-src blob: for the Monaco worker shim (core/monaco/monaco.config.ts).
+      - connect-src ws://localhost:* only for the ng serve dev client; the app has no network calls.
+      Review this header in docs/frontend-guidelines.md §10 before loosening it.
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob:; worker-src 'self' blob:; connect-src 'self' ws://localhost:*; object-src 'none'; base-uri 'self'; form-action 'self'"
+    />
     <title>Bllueprint</title>
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <script src="theme-init.js"></script>
   </head>
   <body>
     <app-root></app-root>

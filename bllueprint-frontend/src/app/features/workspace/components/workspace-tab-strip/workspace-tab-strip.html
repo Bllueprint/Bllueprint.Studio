@@ -1,0 +1,36 @@
+<div class="sk-tabstrip" role="tablist" aria-label="Workspace">
+  <button
+    hlmSidebarTrigger
+    type="button"
+    class="wtabs__trigger"
+    title="Toggle sidebar (Ctrl+B)"
+  ></button>
+
+  @for (tab of workspaceTabs.tabs(); track tab.id) {
+    <!-- A div with role=tab (not a <button>) because the close button is nested inside. -->
+    <div
+      class="sk-tabstrip__tab"
+      role="tab"
+      tabindex="0"
+      [class.sk-tabstrip__tab--active]="tab.id === workspaceTabs.activeTabId()"
+      [attr.aria-selected]="tab.id === workspaceTabs.activeTabId()"
+      (click)="activate(tab.id)"
+      (keydown.enter)="activateFromKeyboard($event, tab.id)"
+      (keydown.space)="activateFromKeyboard($event, tab.id)"
+      (auxclick)="onMiddleClick($event, tab.id)"
+    >
+      <ng-icon class="sk-tabstrip__icon" [name]="icons[tab.kind]" aria-hidden="true" />
+      <span class="sk-tabstrip__title">{{ tab.title }}</span>
+
+      @if (tab.closable) {
+        <button
+          type="button"
+          class="sk-tabstrip__close"
+          (click)="close($event, tab.id)"
+          aria-label="Close tab"
+          title="Close"
+        ></button>
+      }
+    </div>
+  }
+</div>

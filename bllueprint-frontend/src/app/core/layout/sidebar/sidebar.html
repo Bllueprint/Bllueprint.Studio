@@ -1,47 +1,69 @@
-<nav class="sidebar">
-  <div class="sidebar__logo">
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-      <rect width="28" height="28" rx="6" fill="#007acc" />
-      <path d="M7 14L14 7L21 14L14 21L7 14Z" fill="white" opacity="0.9" />
-      <circle cx="14" cy="14" r="3" fill="#007acc" />
-    </svg>
+<hlm-sidebar collapsible="icon" class="app-sidebar">
+  <hlm-sidebar-header>
+    <div class="app-sidebar__brand">
+      <span class="app-sidebar__logo" aria-hidden="true">
+        <!-- Bllueprint app icon (Assets/AppIco*.svg): curly brackets + abstract "B".
+             stroke=currentColor so it follows the theme ink. -->
+        <svg
+          width="28"
+          height="28"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M6 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h2" />
+          <path d="M18 4h2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-2" />
+          <path d="M8 7h6a3 3 0 0 1 0 5H8z" />
+          <path d="M8 12h7a3 3 0 1 1 0 5H8z" />
+        </svg>
+      </span>
+      <span class="app-sidebar__name">Bllueprint</span>
+    </div>
+  </hlm-sidebar-header>
 
-    <span class="sidebar__logo-text">Bllueprint</span>
-  </div>
+  <hlm-sidebar-content>
+    <hlm-sidebar-group>
+      <div hlmSidebarGroupLabel>Workspace</div>
+      <div hlmSidebarGroupContent>
+        <ul hlmSidebarMenu>
+          @for (item of navItems; track item.kind) {
+            <li hlmSidebarMenuItem>
+              <button
+                hlmSidebarMenuButton
+                type="button"
+                [isActive]="activeKind() === item.kind"
+                [tooltip]="item.label"
+                (click)="item.action()"
+              >
+                <ng-icon [name]="item.icon" />
+                <span>{{ item.label }}</span>
+              </button>
+            </li>
+          }
+        </ul>
+      </div>
+    </hlm-sidebar-group>
+  </hlm-sidebar-content>
 
-  <div class="sidebar__section">
-    <span class="sidebar__section-label">Navigation</span>
+  <hlm-sidebar-footer>
+    <ul hlmSidebarMenu>
+      <li hlmSidebarMenuItem>
+        <button hlmSidebarMenuButton type="button" size="sm" tooltip="Information">
+          <ng-icon name="lucideInfo" />
+          <span>About</span>
+        </button>
+      </li>
+      <li hlmSidebarMenuItem>
+        <button hlmSidebarMenuButton type="button" size="sm" tooltip="Help">
+          <ng-icon name="lucideCircleHelp" />
+          <span>Help</span>
+        </button>
+      </li>
+    </ul>
+  </hlm-sidebar-footer>
 
-    @for (item of navItems; track item.label) {
-      <button class="sidebar__nav-item" type="button" (click)="item.action()">
-        <span class="sidebar__nav-icon" aria-hidden="true">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-            <path
-              d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 8v6.5a.5.5 0 0 0 .5.5H6a.5.5 0 0 0 .5-.5V11h3v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5V8a.5.5 0 0 0-.146-.354L8.354 1.146Z"
-            />
-          </svg>
-        </span>
-
-        <span class="sidebar__nav-label">{{ item.label }}</span>
-      </button>
-    }
-  </div>
-
-  <div class="sidebar__footer">
-    <button class="sidebar__footer-item" type="button" aria-label="Information">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-        <path
-          d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 1a6 6 0 1 1 0 12A6 6 0 0 1 8 2zm0 2.5a.75.75 0 1 1 0 1.5.75.75 0 0 1 0-1.5zm-.75 3h1.5v4h-1.5V7.5z"
-        />
-      </svg>
-    </button>
-
-    <button class="sidebar__footer-item" type="button" aria-label="Help">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-        <path
-          d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 2.75a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5zM6 10.5h4v1H6v-1z"
-        />
-      </svg>
-    </button>
-  </div>
-</nav>
+  <button hlmSidebarRail type="button" aria-label="Toggle sidebar"></button>
+</hlm-sidebar>

@@ -54,6 +54,10 @@ npm run dist:linux    # Linux AppImage
 
 The packaged output is placed in `release/`.
 
+Releases are produced by `.github/workflows/release.yml`. Before cutting one,
+go through `../docs/release-checklist.md` (code signing, auto-update,
+versioning and the other items still open).
+
 ## IPC communication
 
 The preload script exposes a `window.bllueprintApi` object to the Angular renderer:
@@ -82,7 +86,13 @@ interface Window {
 |---|---|---|
 | `contextIsolation` | `true` | Renderer cannot access Node globals |
 | `nodeIntegration` | `false` | No accidental Node exposure in Angular |
-| `sandbox` | `false` | Preload still needs `require` |
-| `webSecurity` | `true` (prod) / `false` (dev) | Dev relaxes CORS for `ng serve` |
+| `sandbox` | `true` | OS sandbox on; the preload only uses `contextBridge`/`ipcRenderer` and requires no project files |
+| `webSecurity` | `true` | Same-origin policy on in dev and prod; the `app://` scheme is a standard origin |
+| scheme `bypassCSP` | `false` | The renderer CSP (meta tag in the frontend `index.html`) applies to `app://` too |
+| `will-navigate` | blocked | The window never leaves the dev server / `app://` |
+| `setWindowOpenHandler` | deny + `shell.openExternal` for http(s) | No child windows |
 
 Only APIs explicitly bridged in `preload/index.ts` are reachable from the renderer.
+The IPC channel names are duplicated in the preload (a sandboxed preload cannot
+`require` `shared/constants`); keep them in sync. The frontend's security rules
+are in `../bllueprint-frontend/docs/frontend-guidelines.md` §10.

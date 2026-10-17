@@ -1,5 +1,3 @@
-/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
-/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
 {
   "compileOnSave": false,
   "compilerOptions": {
@@ -13,7 +11,20 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "ES2022",
-    "module": "preserve"
+    "module": "preserve",
+    "paths": {
+      "@app/*": ["./src/app/*"],
+      "@sketch-ui/core": ["./src/sketch-ui/core/index.ts"],
+      "@sketch-ui/elements": ["./src/sketch-ui/elements/index.ts"],
+      "@sketch-ui/sidebar": ["./src/sketch-ui/components/sidebar/src/index.ts"],
+      "@sketch-ui/utils": ["./src/sketch-ui/components/utils/src/index.ts"],
+      "@sketch-ui/button": ["./src/sketch-ui/components/button/src/index.ts"],
+      "@sketch-ui/input": ["./src/sketch-ui/components/input/src/index.ts"],
+      "@sketch-ui/separator": ["./src/sketch-ui/components/separator/src/index.ts"],
+      "@sketch-ui/sheet": ["./src/sketch-ui/components/sheet/src/index.ts"],
+      "@sketch-ui/skeleton": ["./src/sketch-ui/components/skeleton/src/index.ts"],
+      "@sketch-ui/tooltip": ["./src/sketch-ui/components/tooltip/src/index.ts"]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

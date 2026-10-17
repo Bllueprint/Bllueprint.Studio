@@ -1,0 +1,31 @@
+<div class="sketch-root home">
+  <div class="home__hero">
+    <h1 class="home__title">Bllueprint</h1>
+    <p class="home__subtitle">Pick where to start. Each option opens in its own tab.</p>
+  </div>
+
+  <div class="home__options">
+    <button type="button" class="sk-card home__option" (click)="navigator.openEditor()">
+      <span class="home__option-icon" aria-hidden="true">
+        <ng-icon name="lucideCode" />
+      </span>
+      <span class="sk-card__title">Open editor</span>
+      <span class="sk-card__desc">
+        The Bllueprint code editor as it is today: file tabs, Monaco, syntax highlighting.
+      </span>
+      <span class="sk-btn sk-btn--primary home__option-cta">Open editor</span>
+    </button>
+
+    <button type="button" class="sk-card home__option" (click)="navigator.openPlayground()">
+      <span class="home__option-icon" aria-hidden="true">
+        <ng-icon name="lucidePalette" />
+      </span>
+      <span class="sk-card__title">Open playground</span>
+      <span class="sk-card__desc">
+        The sketch UI plan: every control rendered once with the hand-drawn style, plus the theme
+        and stroke controls.
+      </span>
+      <span class="sk-btn home__option-cta">Open playground</span>
+    </button>
+  </div>
+</div>

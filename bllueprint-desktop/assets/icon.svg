@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 24 24">
+  <!--
+    Bllueprint app icon. Source glyph: ../../../Assets/AppIcoDark.svg (curly
+    brackets + abstract "B"). Background: the "blueprint" theme paper color
+    (bllueprint-frontend/src/sketch-ui/styles/themes/blueprint.css, oklch(0.30 0.07 255)).
+    Rasterized by scripts/build-icons.js into icon.png / icon.ico / icon.icns and
+    the frontend favicon.
+  -->
+  <rect width="24" height="24" rx="5.2" fill="#132e50" />
+  <g fill="none" stroke="#f1eee6" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round" transform="translate(12 12) scale(0.8) translate(-12 -12)">
+    <path d="M6 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h2" />
+    <path d="M18 4h2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-2" />
+    <path d="M8 7h6a3 3 0 0 1 0 5H8z" />
+    <path d="M8 12h7a3 3 0 1 1 0 5H8z" />
+  </g>
+</svg>

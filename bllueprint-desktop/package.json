@@ -11,6 +11,7 @@
     "build": "npm run build:angular && npm run build:electron",
     "build:angular": "node scripts/build-angular.js",
     "build:electron": "tsc -p tsconfig.electron.json",
+    "build:icons": "node scripts/build-icons.js",
     "dist": "npm run build && electron-builder",
     "dist:win": "npm run build && electron-builder --win",
     "dist:mac": "npm run build && electron-builder --mac",
@@ -23,6 +24,7 @@
     "concurrently": "^9.2.1",
     "electron": "^41.2.1",
     "electron-builder": "^26.8.1",
+    "png2icons": "^2.0.1",
     "typescript": "~5.9.2",
     "wait-on": "^9.0.5"
   },
@@ -34,13 +36,17 @@
     },
     "files": [
       "dist-electron/**/*",
+      "assets/icon.ico",
+      "assets/icon.png",
       "package.json"
     ],
     "extraResources": [
       {
         "from": "dist-frontend/browser",
         "to": "dist-frontend/browser",
-        "filter": ["**/*"]
+        "filter": [
+          "**/*"
+        ]
       }
     ],
     "win": {

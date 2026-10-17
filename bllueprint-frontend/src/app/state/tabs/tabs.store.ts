@@ -12,18 +12,18 @@ export class TabsStore {
 
   readonly activeTab = computed(() => {
     const activeTabId = this._activeTabId();
-    return this._tabs().find(tab => tab.id === activeTabId) ?? null;
+    return this._tabs().find((tab) => tab.id === activeTabId) ?? null;
   });
 
   openTab(tab: Tab): void {
-    const existingTab = this._tabs().find(existing => existing.id === tab.id);
+    const existingTab = this._tabs().find((existing) => existing.id === tab.id);
 
     if (existingTab) {
       this._activeTabId.set(tab.id);
       return;
     }
 
-    this._tabs.update(currentTabs => [...currentTabs, tab]);
+    this._tabs.update((currentTabs) => [...currentTabs, tab]);
     this._activeTabId.set(tab.id);
   }
 
@@ -33,13 +33,13 @@ export class TabsStore {
 
   closeTab(tabId: string): void {
     const currentTabs = this._tabs();
-    const closingIndex = currentTabs.findIndex(tab => tab.id === tabId);
+    const closingIndex = currentTabs.findIndex((tab) => tab.id === tabId);
 
     if (closingIndex === -1) {
       return;
     }
 
-    const updatedTabs = currentTabs.filter(tab => tab.id !== tabId);
+    const updatedTabs = currentTabs.filter((tab) => tab.id !== tabId);
     this._tabs.set(updatedTabs);
 
     if (this._activeTabId() !== tabId) {
@@ -56,7 +56,7 @@ export class TabsStore {
   }
 
   setActiveTab(tabId: string): void {
-    const tabExists = this._tabs().some(tab => tab.id === tabId);
+    const tabExists = this._tabs().some((tab) => tab.id === tabId);
 
     if (!tabExists) {
       return;
@@ -66,29 +66,29 @@ export class TabsStore {
   }
 
   updateTabContent(tabId: string, content: string): void {
-    this._tabs.update(currentTabs =>
-      currentTabs.map(tab =>
+    this._tabs.update((currentTabs) =>
+      currentTabs.map((tab) =>
         tab.id === tabId
           ? {
               ...tab,
               content,
               isDirty: true,
             }
-          : tab
-      )
+          : tab,
+      ),
     );
   }
 
   markTabSaved(tabId: string): void {
-    this._tabs.update(currentTabs =>
-      currentTabs.map(tab =>
+    this._tabs.update((currentTabs) =>
+      currentTabs.map((tab) =>
         tab.id === tabId
           ? {
               ...tab,
               isDirty: false,
             }
-          : tab
-      )
+          : tab,
+      ),
     );
   }
 

@@ -31,9 +31,12 @@ yarn-error.log
 
 # Miscellaneous
 /.angular/cache
+/.nx
 .sass-cache/
 /connect.lock
 /coverage
+/e2e/.results
+/e2e/.report
 /libpeerconnection.log
 testem.log
 /typings

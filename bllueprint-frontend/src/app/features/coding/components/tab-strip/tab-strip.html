@@ -1,11 +1,17 @@
-<div class="tab-strip">
+<div class="sk-tabstrip sk-tabstrip--paper" role="tablist" aria-label="Open files">
   @for (tab of tabsStore.tabs(); track tab.id) {
+    <!-- A div with role=tab (not a <button>) because the close button is nested inside. -->
     <div
-      class="tab-strip__tab"
-      [class.tab-strip__tab--active]="tabsStore.activeTabId() === tab.id"
+      class="sk-tabstrip__tab"
+      role="tab"
+      tabindex="0"
+      [class.sk-tabstrip__tab--active]="tabsStore.activeTabId() === tab.id"
+      [attr.aria-selected]="tabsStore.activeTabId() === tab.id"
       (click)="activate(tab.id)"
+      (keydown.enter)="activateFromKeyboard($event, tab.id)"
+      (keydown.space)="activateFromKeyboard($event, tab.id)"
     >
-      <span class="tab-strip__icon" aria-hidden="true">
+      <span class="sk-tabstrip__icon" aria-hidden="true">
         <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
           <path
             d="M2 2.5A.5.5 0 0 1 2.5 2h6.793l4.207 4.207v7.293a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-11zm1 0v10h9V7H8.5A.5.5 0 0 1 8 6.5V2.5H3zm6 0v3.5h3L9 2.5z"
@@ -13,29 +19,23 @@
         </svg>
       </span>
 
-      <span class="tab-strip__title">{{ tab.title }}</span>
+      <span class="sk-tabstrip__title">{{ tab.title }}</span>
 
       @if (tab.isDirty) {
-        <span class="tab-strip__dirty-dot" aria-hidden="true"></span>
+        <span class="sk-tabstrip__dot" aria-label="Unsaved changes"></span>
       }
 
       <button
         type="button"
-        class="tab-strip__close"
+        class="sk-tabstrip__close"
         (click)="close($event, tab.id)"
         aria-label="Close tab"
         title="Close"
-      >
-        <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
-          <path
-            d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"
-          />
-        </svg>
-      </button>
+      ></button>
     </div>
   }
 
   @if (tabsStore.tabs().length === 0) {
-    <div class="tab-strip__empty">No open files</div>
+    <div class="sk-tabstrip__empty">No open files</div>
   }
 </div>

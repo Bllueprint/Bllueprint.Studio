@@ -1,0 +1,105 @@
+/*
+ * Sketch utilities (Tailwind v4 `@utility`, so they can be used as classes in
+ * the helms: `class="sketch"`, `class="sketch-line"` …).
+ *
+ * Layer L1 (CSS irregular radius) is the default everywhere; the Rough.js
+ * layer (L3) is a later step, see plano-sketch-ui.md §3.4.
+ */
+
+@utility sketch {
+  border: var(--sketch-width) solid var(--sketch-stroke);
+  border-radius: var(--sketch-radius);
+}
+
+@utility sketch-sm {
+  border: var(--sketch-width) solid var(--sketch-stroke);
+  border-radius: var(--sketch-radius-sm);
+}
+
+@utility sketch-inner {
+  border: var(--sketch-width-inner) solid var(--sketch-stroke);
+  border-radius: var(--sketch-radius-sm);
+}
+
+@utility sketch-round {
+  border: var(--sketch-width) solid var(--sketch-stroke);
+  border-radius: var(--sketch-radius-round);
+}
+
+@utility sketch-pill {
+  border: var(--sketch-width-inner) solid var(--sketch-stroke);
+  border-radius: var(--sketch-radius-pill);
+}
+
+@utility sketch-muted {
+  border-color: var(--sketch-stroke-muted);
+}
+
+@utility sketch-dashed {
+  border-style: dashed;
+}
+
+@utility sketch-font {
+  font-family: var(--sketch-font-active);
+}
+
+@utility sketch-hatch {
+  background-image: var(--sketch-hatch);
+}
+
+@utility sketch-paper {
+  background-color: var(--background);
+  background-image: var(--sketch-paper-pattern);
+  background-size: var(--sketch-paper-pattern-size);
+}
+
+/* Hand-drawn horizontal rule at the bottom of the element (table rows, tabs, separators) */
+@utility sketch-line {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 4px;
+    background-color: var(--sketch-stroke-muted);
+    mask: var(--sketch-mask-line-h) repeat-x center / 200px 4px;
+    pointer-events: none;
+  }
+
+  /* 3 variations so consecutive lines do not look identical */
+  &:nth-child(3n + 2)::after {
+    mask-position: 37px center;
+  }
+
+  &:nth-child(3n)::after {
+    mask-position: 91px center;
+  }
+}
+
+/* Hand-drawn vertical rule at the right edge */
+@utility sketch-line-v {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: -2px;
+    width: 4px;
+    background-color: var(--sketch-stroke-muted);
+    mask: var(--sketch-mask-line-v) repeat-y center / 4px 200px;
+    pointer-events: none;
+  }
+}
+
+/* Focus ring that stays visible on any theme (WCAG 2.4.7) */
+@utility sketch-focus {
+  &:focus-visible {
+    outline: var(--sketch-width) dashed var(--ring);
+    outline-offset: 3px;
+  }
+}

@@ -4,15 +4,16 @@ on:
   pull_request:
     branches:
       - main
+  push:
+    branches:
+      - main
 
 jobs:
-  build-and-test:
+  backend:
     runs-on: ubuntu-latest
-
     defaults:
       run:
         working-directory: bllueprint-backend
-        
     steps:
       - uses: actions/checkout@v4
 
@@ -28,3 +29,85 @@ jobs:
 
       - name: Test
         run: dotnet test --configuration Release --no-build --verbosity normal
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: bllueprint-frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: bllueprint-frontend/package-lock.json
+
+      - name: Install
+        run: npm ci --legacy-peer-deps
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Format check
+        run: npx prettier --check src docs e2e playwright.config.ts eslint.config.js
+
+      - name: Unit tests
+        run: npx ng test --watch=false
+
+      - name: Build
+        run: npm run build
+
+      # Dependencies that ship in the bundle must be free of high/critical advisories.
+      - name: Audit (runtime dependencies)
+        run: npm audit --omit=dev --audit-level=high
+
+      # Tooling advisories are reported but do not block the build.
+      - name: Audit (all dependencies, informational)
+        run: npm audit --audit-level=critical
+        continue-on-error: true
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      # Regression suite against the production build (same bundle and CSP as the desktop app).
+      - name: End-to-end tests (web)
+        run: npm run test:e2e
+
+      - name: Upload e2e report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-report
+          path: |
+            bllueprint-frontend/e2e/.report
+            bllueprint-frontend/e2e/.results
+          retention-days: 7
+
+  desktop:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: bllueprint-desktop
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: bllueprint-desktop/package-lock.json
+
+      - name: Install
+        run: npm ci --legacy-peer-deps
+
+      - name: Type-check and build main/preload
+        run: npm run build:electron
+
+      - name: Audit (runtime dependencies)
+        run: npm audit --omit=dev --audit-level=high
+
+      - name: Audit (all dependencies, informational)
+        run: npm audit --audit-level=critical
+        continue-on-error: true

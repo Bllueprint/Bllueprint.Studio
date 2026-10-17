@@ -1,0 +1,976 @@
+<div class="sketch-root pg">
+  <!-- ====================================================== Toolbar -->
+  <header class="pg__toolbar">
+    <span class="pg__toolbar-title">Sketch playground</span>
+
+    <label class="pg__control">
+      Theme
+      <span class="sk-select-wrap">
+        <select class="sk-select" (change)="onThemeChange($event)">
+          @for (item of theme.themes; track item.id) {
+            <option [value]="item.id" [selected]="item.id === theme.theme().id">
+              {{ item.label }}
+            </option>
+          }
+        </select>
+      </span>
+    </label>
+
+    <label class="pg__control">
+      <input
+        type="checkbox"
+        class="sk-checkbox"
+        [checked]="sideBySide()"
+        (change)="onSideBySide($event)"
+      />
+      All themes side by side
+    </label>
+
+    <span class="pg__control">
+      Stroke
+      <sk-slider
+        ariaLabel="Stroke width"
+        [min]="1"
+        [max]="5"
+        [step]="0.5"
+        [value]="config.strokeWidth()"
+        (valueChange)="config.setStrokeWidth($event)"
+      />
+      <span class="pg__control-value">{{ config.strokeWidth() }}px</span>
+    </span>
+
+    <label class="pg__control">
+      <input
+        type="checkbox"
+        class="sk-switch"
+        [checked]="config.handwriting()"
+        (change)="onHandwriting($event)"
+      />
+      Handwritten font
+    </label>
+
+    <label class="pg__control" title="Comic Mono in the code editor (saved as a preference)">
+      <input
+        type="checkbox"
+        class="sk-switch"
+        [checked]="config.editorFont() === 'sketch'"
+        (change)="onEditorFont($event)"
+      />
+      Sketch code font
+    </label>
+  </header>
+
+  <!-- ========================================================= Body -->
+  <div class="pg__body">
+    @if (sideBySide()) {
+      <div class="pg__split">
+        @for (item of theme.themes; track item.id) {
+          <ng-container
+            *ngTemplateOutlet="
+              canvas;
+              context: { themeId: item.id, scheme: item.scheme, label: item.label }
+            "
+          />
+        }
+      </div>
+    } @else {
+      <ng-container
+        *ngTemplateOutlet="canvas; context: { themeId: null, scheme: null, label: null }"
+      />
+    }
+  </div>
+</div>
+
+<!-- ============================================================ Canvas -->
+<ng-template #canvas let-themeId="themeId" let-scheme="scheme" let-label="label">
+  <div
+    class="sketch-root pg__canvas"
+    [class.pg__canvas--labelled]="label"
+    [class.dark]="scheme === 'dark'"
+    [attr.data-theme]="themeId"
+    [attr.data-scheme]="scheme"
+  >
+    @if (label) {
+      <div class="pg__canvas-label">{{ label }}</div>
+    }
+
+    <nav class="pg__anchors" aria-label="Sections">
+      @for (section of sections; track section.id) {
+        <button type="button" class="pg__anchor" (click)="scrollTo($event, section.id)">
+          {{ section.label }}
+        </button>
+      }
+    </nav>
+
+    <div class="pg__sections">
+      <!-- ===================================================== Basics -->
+      <section class="pg__section" data-section="basics">
+        <h2 class="pg__section-title">Basics</h2>
+
+        <div class="pg__block">
+          <h3 class="pg__block-title">Button — variants</h3>
+          <div class="pg__row">
+            <button type="button" class="sk-btn sk-btn--primary">Default</button>
+            <button type="button" class="sk-btn sk-btn--secondary">Secondary</button>
+            <button type="button" class="sk-btn">Outline</button>
+            <button type="button" class="sk-btn sk-btn--ghost">Ghost</button>
+            <button type="button" class="sk-btn sk-btn--destructive">Destructive</button>
+            <button type="button" class="sk-btn sk-btn--link">Link</button>
+          </div>
+          <h3 class="pg__block-title">Button — sizes & states</h3>
+          <div class="pg__row">
+            <button type="button" class="sk-btn sk-btn--sm">Small</button>
+            <button type="button" class="sk-btn">Default</button>
+            <button type="button" class="sk-btn sk-btn--lg">Large</button>
+            <button type="button" class="sk-btn sk-btn--icon" aria-label="Icon">✎</button>
+            <button type="button" class="sk-btn" disabled>Disabled</button>
+            <span class="sk-btn-group">
+              <button type="button" class="sk-btn">Left</button>
+              <button type="button" class="sk-btn">Center</button>
+              <button type="button" class="sk-btn">Right</button>
+            </span>
+          </div>
+        </div>
+
+        <div class="pg__block">
+          <h3 class="pg__block-title">Badge</h3>
+          <div class="pg__row">
+            <span class="sk-badge">Default</span>
+            <span class="sk-badge sk-badge--secondary">Secondary</span>
+            <span class="sk-badge sk-badge--outline">Outline</span>
+            <span class="sk-badge sk-badge--destructive">Destructive</span>
+          </div>
+        </div>
+
+        <div class="pg__block">
+          <h3 class="pg__block-title">Card</h3>
+          <div class="pg__grid">
+            <div class="sk-card">
+              <div class="sk-card__title">Card title</div>
+              <div class="sk-card__desc">
+                A short description that explains what this card is for.
+              </div>
+              <p>Card content goes here. It can hold any other sketch component.</p>
+              <div class="sk-card__footer">
+                <button type="button" class="sk-btn sk-btn--ghost">Cancel</button>
+                <button type="button" class="sk-btn sk-btn--primary">Save</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pg__block">
+          <h3 class="pg__block-title">Label · Separator · Kbd</h3>
+          <div class="pg__row">
+            <!-- Label style demo without a control, so a <span> (a bare <label> is an a11y finding). -->
+            <span class="sk-label">A form label</span>
+            <span class="pg__muted">Press</span>
+            <kbd class="sk-kbd">Ctrl</kbd>
+            <span class="pg__muted">+</span>
+            <kbd class="sk-kbd">B</kbd>
+            <span class="pg__muted">to toggle the sidebar</span>
+          </div>
+          <div class="sk-separator" role="separator"></div>
+          <div class="pg__row" style="height: 2rem">
+            <span>Left</span>
+            <span class="sk-separator sk-separator--vertical" role="separator"></span>
+            <span>Right</span>
+          </div>
+        </div>
+
+        <div class="pg__block">
+          <h3 class="pg__block-title">Avatar · Skeleton · Spinner</h3>
+          <div class="pg__row">
+            <span class="sk-avatar">UA</span>
+            <span class="sk-avatar sk-avatar--sm">B</span>
+            <span class="sk-skeleton" style="width: 8rem"></span>
+            <span class="sk-skeleton" style="width: 4rem; height: 2rem"></span>
+            <span class="sk-spinner" role="status" aria-label="Loading"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================== Forms -->
+      <section class="pg__section" data-section="forms">
+        <h2 class="pg__section-title">Forms</h2>
+
+        <form class="pg__form" (submit)="$event.preventDefault()">
+          <div class="sk-field">
+            <label class="sk-label" for="pg-name-{{ themeId }}">Name</label>
+            <input id="pg-name-{{ themeId }}" class="sk-input" placeholder="Your name" />
+            <span class="sk-field__hint">As it should appear in reports.</span>
+          </div>
+
+          <div class="sk-field sk-field--invalid">
+            <label class="sk-label" for="pg-email-{{ themeId }}">E-mail</label>
+            <input
+              id="pg-email-{{ themeId }}"
+              class="sk-input"
+              type="email"
+              value="not-an-email"
+              aria-invalid="true"
+            />
+            <span class="sk-field__error">Enter a valid e-mail address.</span>
+          </div>
+
+          <div class="sk-field">
+            <label class="sk-label" for="pg-role-{{ themeId }}">Role</label>
+            <span class="sk-select-wrap">
+              <select id="pg-role-{{ themeId }}" class="sk-select">
+                <option>Planner</option>
+                <option>Analyst</option>
+                <option>Administrator</option>
+              </select>
+            </span>
+          </div>
+
+          <div class="sk-field">
+            <label class="sk-label" [attr.for]="'pg-date-' + themeId">Due date</label>
+            <!-- Date picker: the native <input type="date"> popup cannot be styled,
+                 so the field opens the sketch calendar in a popover instead. -->
+            <div class="sk-datepicker" [style.anchor-name]="'--pg-date-' + themeId">
+              <input
+                [attr.id]="'pg-date-' + themeId"
+                class="sk-input"
+                readonly
+                placeholder="Pick a date"
+                [value]="dueDate()"
+              />
+              <button
+                type="button"
+                class="sk-datepicker__toggle"
+                aria-label="Open calendar"
+                [attr.popovertarget]="'pg-date-pop-' + themeId"
+              >
+                <svg
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M2.6 4.2 C 5 3.6, 11 3.9, 13.4 3.8 C 13.6 7, 13.3 10.8, 13.5 13.3 C 10.5 13.6, 5.2 13.4, 2.5 13.5 C 2.3 10.5, 2.7 7.2, 2.6 4.2 Z"
+                  />
+                  <path d="M2.8 6.9 L13.3 6.8 M5.4 2.2 L5.5 5 M10.6 2.1 L10.7 4.9" />
+                  <path
+                    d="M5.3 9.4 L6.4 9.4 M7.7 9.4 L8.8 9.4 M10.2 9.4 L11.2 9.4 M5.3 11.4 L6.4 11.4 M7.7 11.4 L8.8 11.4"
+                  />
+                </svg>
+              </button>
+            </div>
+            <div
+              popover
+              class="sk-popover sk-popover--bare"
+              [attr.id]="'pg-date-pop-' + themeId"
+              [style.position-anchor]="'--pg-date-' + themeId"
+            >
+              <ng-container
+                *ngTemplateOutlet="calendarTpl; context: { popoverId: 'pg-date-pop-' + themeId }"
+              />
+            </div>
+          </div>
+
+          <div class="sk-field">
+            <label class="sk-label" for="pg-combo-{{ themeId }}">Combobox / autocomplete</label>
+            <input
+              id="pg-combo-{{ themeId }}"
+              class="sk-input"
+              [attr.list]="'pg-species-' + themeId"
+              placeholder="Type to search…"
+            />
+            <datalist id="pg-species-{{ themeId }}">
+              <option value="Pinus taeda"></option>
+              <option value="Eucalyptus grandis"></option>
+              <option value="Picea glauca"></option>
+            </datalist>
+          </div>
+
+          <div class="sk-field">
+            <label class="sk-label" for="pg-area-{{ themeId }}">Input group</label>
+            <span class="sk-input-group">
+              <span class="sk-input-group__addon">ha</span>
+              <input id="pg-area-{{ themeId }}" class="sk-input" value="1250" />
+              <span class="sk-input-group__addon">.00</span>
+            </span>
+          </div>
+
+          <div class="sk-field pg__form-full">
+            <label class="sk-label" for="pg-notes-{{ themeId }}">Notes</label>
+            <textarea
+              id="pg-notes-{{ themeId }}"
+              class="sk-textarea"
+              placeholder="Anything else?"
+            ></textarea>
+          </div>
+
+          <div class="sk-field">
+            <span class="sk-label">Checkbox</span>
+            <label class="sk-choice"
+              ><input type="checkbox" class="sk-checkbox" checked /> Checked</label
+            >
+            <label class="sk-choice"><input type="checkbox" class="sk-checkbox" /> Unchecked</label>
+            <label class="sk-choice"
+              ><input type="checkbox" class="sk-checkbox" disabled /> Disabled</label
+            >
+          </div>
+
+          <div class="sk-field">
+            <span class="sk-label">Radio group</span>
+            <label class="sk-choice"
+              ><input type="radio" class="sk-radio" name="pg-radio-{{ themeId }}" checked /> Option
+              A</label
+            >
+            <label class="sk-choice"
+              ><input type="radio" class="sk-radio" name="pg-radio-{{ themeId }}" /> Option B</label
+            >
+            <label class="sk-choice"
+              ><input type="radio" class="sk-radio" name="pg-radio-{{ themeId }}" disabled /> Option
+              C</label
+            >
+          </div>
+
+          <div class="sk-field">
+            <span class="sk-label">Switch</span>
+            <label class="sk-choice"
+              ><input type="checkbox" class="sk-switch" checked /> Notifications</label
+            >
+            <label class="sk-choice"><input type="checkbox" class="sk-switch" /> Dark mode</label>
+          </div>
+
+          <div class="sk-field">
+            <label class="sk-label" for="pg-slider-{{ themeId }}">Slider</label>
+            <sk-slider [inputId]="'pg-slider-' + themeId" [(value)]="demoSlider" />
+          </div>
+
+          <div class="sk-field">
+            <span class="sk-label">Toggle / toggle group</span>
+            <div class="pg__row">
+              <button type="button" class="sk-toggle" aria-pressed="true">
+                <strong>B</strong>
+              </button>
+              <button type="button" class="sk-toggle" aria-pressed="false"><em>I</em></button>
+              <span class="sk-toggle-group" role="group">
+                <button type="button" class="sk-toggle" aria-pressed="false">Left</button>
+                <button type="button" class="sk-toggle" aria-pressed="true">Center</button>
+                <button type="button" class="sk-toggle" aria-pressed="false">Right</button>
+              </span>
+            </div>
+          </div>
+
+          <div class="sk-field">
+            <span class="sk-label">Input OTP</span>
+            <span class="sk-otp">
+              <input class="sk-otp__slot" maxlength="1" value="4" aria-label="Digit 1" />
+              <input class="sk-otp__slot" maxlength="1" value="2" aria-label="Digit 2" />
+              <input class="sk-otp__slot" maxlength="1" aria-label="Digit 3" />
+              <input class="sk-otp__slot" maxlength="1" aria-label="Digit 4" />
+            </span>
+          </div>
+
+          <div class="sk-field pg__form-full">
+            <span class="sk-label">Calendar</span>
+            <ng-container *ngTemplateOutlet="calendarTpl; context: { popoverId: null }" />
+          </div>
+
+          <!-- Shared calendar markup: standalone above, and inside the date picker popover.
+               When `popoverId` is set, picking a day also closes that popover. -->
+          <ng-template #calendarTpl let-popoverId="popoverId">
+            <div class="sk-calendar">
+              <div class="sk-calendar__head">
+                <button
+                  type="button"
+                  class="sk-btn sk-btn--ghost sk-btn--sm"
+                  aria-label="Previous month"
+                >
+                  ‹
+                </button>
+                <span>October 2026</span>
+                <button
+                  type="button"
+                  class="sk-btn sk-btn--ghost sk-btn--sm"
+                  aria-label="Next month"
+                >
+                  ›
+                </button>
+              </div>
+              <div class="sk-calendar__grid">
+                @for (dow of weekDays; track $index) {
+                  <span class="sk-calendar__dow">{{ dow }}</span>
+                }
+                @for (cell of calendar; track $index) {
+                  <button
+                    type="button"
+                    class="sk-calendar__day"
+                    [class.sk-calendar__day--selected]="!cell.outside && cell.day === selectedDay()"
+                    [class.sk-calendar__day--outside]="cell.outside"
+                    [attr.popovertarget]="cell.outside ? null : popoverId"
+                    [attr.popovertargetaction]="popoverId && !cell.outside ? 'hide' : null"
+                    (click)="pickDay(cell)"
+                  >
+                    {{ cell.day }}
+                  </button>
+                }
+              </div>
+            </div>
+          </ng-template>
+
+          <div class="pg__form-actions pg__form-full">
+            <button type="reset" class="sk-btn sk-btn--ghost">Reset</button>
+            <button type="submit" class="sk-btn sk-btn--primary">Submit</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- =================================================== Overlays -->
+      <section class="pg__section" data-section="overlays">
+        <h2 class="pg__section-title">Overlays</h2>
+
+        <div class="pg__block">
+          <h3 class="pg__block-title">Dialog · Alert dialog · Sheet</h3>
+          <div class="pg__row">
+            <button type="button" class="sk-btn" (click)="dialog.showModal()">Open dialog</button>
+            <button
+              type="button"
+              class="sk-btn sk-btn--destructive"
+              (click)="alertDialog.showModal()"
+            >
+              Open alert dialog
+            </button>
+            <button type="button" class="sk-btn" (click)="sheet.showModal()">Open sheet</button>
+          </div>
+
+          <dialog #dialog class="sk-dialog">
+            <button
+              type="button"
+              class="sk-dialog__close"
+              aria-label="Close"
+              (click)="dialog.close()"
+            ></button>
+            <div class="sk-dialog__title">Edit profile</div>
+            <div class="sk-dialog__desc">
+              Make changes to your profile here. Click save when you're done.
+            </div>
+            <div class="sk-field">
+              <label class="sk-label" for="pg-display-name-{{ themeId }}">Display name</label>
+              <input id="pg-display-name-{{ themeId }}" class="sk-input" value="Ulisses" />
+            </div>
+            <div class="sk-dialog__footer" style="margin-top: 1rem">
+              <button type="button" class="sk-btn sk-btn--ghost" (click)="dialog.close()">
+                Cancel
+              </button>
+              <button type="button" class="sk-btn sk-btn--primary" (click)="dialog.close()">
+                Save
+              </button>
+            </div>
+          </dialog>
+
+          <dialog #alertDialog class="sk-dialog">
+            <div class="sk-dialog__title">Delete this plan?</div>
+            <div class="sk-dialog__desc">
+              This action cannot be undone. The plan and its scenarios will be removed.
+            </div>
+            <div class="sk-dialog__footer">
+              <button type="button" class="sk-btn sk-btn--ghost" (click)="alertDialog.close()">
+                Cancel
+              </button>
+              <button
+                type="button"
+                class="sk-btn sk-btn--destructive"
+                (click)="alertDialog.close()"
+              >
+                Delete
+              </button>
+            </div>
+          </dialog>
+
+          <dialog #sheet class="sk-dialog sk-sheet">
+            <button
+              type="button"
+              class="sk-dialog__close"
+              aria-label="Close"
+              (click)="sheet.close()"
+            ></button>
+            <div class="sk-dialog__title">Sheet</div>
+            <div class="sk-dialog__desc">Slides in from the right edge.</div>
+            <p>Sheets are good for secondary forms and filters.</p>
+          </dialog>
+        </div>
+
+        <div class="pg__block">
+          <h3 class="pg__block-title">Popover · Hover card · Tooltip</h3>
+          <div class="pg__row">
+            <button
+              type="button"
+              class="sk-btn sk-popover-anchor"
+              [attr.popovertarget]="'pg-popover-' + themeId"
+            >
+              Open popover
+            </button>
+            <div [attr.id]="'pg-popover-' + themeId" popover class="sk-popover">
+              <div class="sk-card__title">Dimensions</div>
+              <div class="sk-card__desc">Set the dimensions for the layer.</div>
+            </div>
+
+            <span class="sk-hovercard">
+              <button type="button" class="sk-btn sk-btn--link">&#64;bllueprint</button>
+              <span class="sk-hovercard__content">
+                <span class="sk-card__title">&#64;bllueprint</span>
+                <span class="sk-card__desc">Forest planning DSL and tooling. Joined 2026.</span>
+              </span>
+            </span>
+
+            <span class="sk-tooltip" data-tip="Hand-drawn tooltip">
+              <button type="button" class="sk-btn sk-btn--ghost">Hover me</button>
+            </span>
+          </div>
+        </div>
+
+        <div class="pg__block">
+          <h3 class="pg__block-title">Dropdown menu · Menubar · Context menu</h3>
+          <div class="pg__row pg__row--top">
+            <details class="sk-menu" skMenu>
+              <summary class="sk-btn">Options ▾</summary>
+              <ul class="sk-menu__list">
+                <li class="sk-menu__label">Plan</li>
+                <li>
+                  <button type="button" class="sk-menu__item">
+                    Rename <kbd class="sk-kbd">F2</kbd>
+                  </button>
+                </li>
+                <li>
+                  <button type="button" class="sk-menu__item">
+                    Duplicate <kbd class="sk-kbd">⌘D</kbd>
+                  </button>
+                </li>
+                <li class="sk-menu__sep" role="separator"></li>
+                <li>
+                  <button type="button" class="sk-menu__item sk-menu__item--destructive">
+                    Delete
+                  </button>
+                </li>
+              </ul>
+            </details>
+
+            <div class="sk-menubar">
+              <details class="sk-menu" skMenu>
+                <summary class="sk-btn sk-btn--ghost sk-btn--sm">File</summary>
+                <ul class="sk-menu__list">
+                  <li><button type="button" class="sk-menu__item">New plan</button></li>
+                  <li><button type="button" class="sk-menu__item">Open…</button></li>
+                </ul>
+              </details>
+              <details class="sk-menu" skMenu>
+                <summary class="sk-btn sk-btn--ghost sk-btn--sm">Edit</summary>
+                <ul class="sk-menu__list">
+                  <li><button type="button" class="sk-menu__item">Undo</button></li>
+                  <li><button type="button" class="sk-menu__item">Redo</button></li>
+                </ul>
+              </details>
+              <details class="sk-menu" skMenu>
+                <summary class="sk-btn sk-btn--ghost sk-btn--sm">View</summary>
+                <ul class="sk-menu__list">
+                  <li><button type="button" class="sk-menu__item">Zoom in</button></li>
+                </ul>
+              </details>
+            </div>
+
+            <div class="sk-context-area" style="width: 16rem">
+              Right-click area (menu shown open →)
+            </div>
+            <ul class="sk-menu__list" aria-label="Context menu">
+              <li><button type="button" class="sk-menu__item">Back</button></li>
+              <li><button type="button" class="sk-menu__item" data-highlighted>Reload</button></li>
+              <li class="sk-menu__sep" role="separator"></li>
+              <li><button type="button" class="sk-menu__item">Inspect</button></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="pg__block">
+          <h3 class="pg__block-title">Command · Toast (sonner)</h3>
+          <div class="pg__row pg__row--top">
+            <div class="sk-command">
+              <input class="sk-command__input" placeholder="Type a command or search…" />
+              <div class="sk-separator"></div>
+              <ul class="sk-command__list">
+                <li class="sk-menu__label">Suggestions</li>
+                <li>
+                  <button type="button" class="sk-menu__item">
+                    Open plan <kbd class="sk-kbd">⌘O</kbd>
+                  </button>
+                </li>
+                <li>
+                  <button type="button" class="sk-menu__item" data-highlighted>
+                    Run optimization <kbd class="sk-kbd">⌘R</kbd>
+                  </button>
+                </li>
+                <li><button type="button" class="sk-menu__item">Export report</button></li>
+              </ul>
+            </div>
+
+            <div class="pg__toasts">
+              <div class="sk-toast" role="status">
+                <span>✓</span>
+                <div>
+                  <div class="sk-toast__title">Plan saved</div>
+                  <div class="sk-toast__desc">Scenario “Base 2026” was saved.</div>
+                </div>
+              </div>
+              <div class="sk-toast sk-alert--destructive" role="alert">
+                <span>!</span>
+                <div>
+                  <div class="sk-toast__title">Export failed</div>
+                  <div class="sk-toast__desc">Could not reach the server.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================= Navigation -->
+      <section class="pg__section" data-section="navigation">
+        <h2 class="pg__section-title">Navigation &amp; layout</h2>
+
+        <div class="pg__block">
+          <h3 class="pg__block-title">Tabs</h3>
+          <div class="sk-tabs">
+            <div class="sk-tabs__list" role="tablist">
+              <button
+                type="button"
+                class="sk-tabs__tab"
+                role="tab"
+                [attr.aria-selected]="activeTab() === 'overview'"
+                (click)="selectTab('overview')"
+              >
+                Overview
+              </button>
+              <button
+                type="button"
+                class="sk-tabs__tab"
+                role="tab"
+                [attr.aria-selected]="activeTab() === 'scenarios'"
+                (click)="selectTab('scenarios')"
+              >
+                Scenarios
+              </button>
+              <button
+                type="button"
+                class="sk-tabs__tab"
+                role="tab"
+                [attr.aria-selected]="activeTab() === 'reports'"
+                (click)="selectTab('reports')"
+              >
+                Reports
+              </button>
+            </div>
+            <div class="sk-tabs__panel" role="tabpanel">
+              @switch (activeTab()) {
+                @case ('scenarios') {
+                  Compare scenarios side by side.
+                }
+                @case ('reports') {
+                  Generated reports and exports.
+                }
+                @default {
+                  A quick overview of the current plan.
+                }
+              }
+            </div>
+          </div>
+        </div>
+
+        <div class="pg__block">
+          <h3 class="pg__block-title">Accordion · Collapsible</h3>
+          <div>
+            <details class="sk-accordion" open>
+              <summary class="sk-accordion__summary">Is it accessible?</summary>
+              <div class="sk-accordion__body">
+                Yes. Behavior comes from the brain / native elements; only the look changes.
+              </div>
+            </details>
+            <details class="sk-accordion">
+              <summary class="sk-accordion__summary">Is it styled?</summary>
+              <div class="sk-accordion__body">
+                Yes, with the sketch tokens and hand-drawn lines.
+              </div>
+            </details>
+            <details class="sk-accordion">
+              <summary class="sk-accordion__summary">Collapsible (single)</summary>
+              <div class="sk-accordion__body">A collapsible is just one accordion item.</div>
+            </details>
+          </div>
+        </div>
+
+        <div class="pg__block">
+          <h3 class="pg__block-title">Breadcrumb · Pagination · Navigation menu</h3>
+          <div class="pg__row">
+            <ol class="sk-breadcrumb">
+              <li><a href="#">Home</a></li>
+              <li><a href="#">Plans</a></li>
+              <li aria-current="page">Base 2026</li>
+            </ol>
+          </div>
+          <div class="pg__row">
+            <nav class="sk-pagination" aria-label="Pagination">
+              <button type="button" class="sk-pagination__page" aria-label="Previous">‹</button>
+              <button type="button" class="sk-pagination__page">1</button>
+              <button type="button" class="sk-pagination__page" aria-current="page">2</button>
+              <button type="button" class="sk-pagination__page">3</button>
+              <span class="sk-pagination__page">…</span>
+              <button type="button" class="sk-pagination__page">12</button>
+              <button type="button" class="sk-pagination__page" aria-label="Next">›</button>
+            </nav>
+          </div>
+          <div class="pg__row">
+            <nav class="sk-navmenu">
+              <details class="sk-menu" skMenu>
+                <summary class="sk-navmenu__link">Getting started ▾</summary>
+                <ul class="sk-menu__list">
+                  <li><button type="button" class="sk-menu__item">Introduction</button></li>
+                  <li><button type="button" class="sk-menu__item">Installation</button></li>
+                </ul>
+              </details>
+              <a class="sk-navmenu__link" href="#">Components</a>
+              <a class="sk-navmenu__link" href="#">Docs</a>
+            </nav>
+          </div>
+        </div>
+
+        <div class="pg__block">
+          <h3 class="pg__block-title">Sidebar (static) · Resizable · Scroll area</h3>
+          <div class="pg__row pg__row--top">
+            <nav class="sk-sidebar">
+              <span class="sk-sidebar__label">Workspace</span>
+              <button type="button" class="sk-sidebar__item" aria-current="page">Home</button>
+              <button type="button" class="sk-sidebar__item">Editor</button>
+              <button type="button" class="sk-sidebar__item">Playground</button>
+              <span class="sk-sidebar__label">Settings</span>
+              <button type="button" class="sk-sidebar__item">Profile</button>
+            </nav>
+
+            <div class="sk-resizable" style="width: 20rem">
+              <div class="sk-resizable__pane sk-resizable__pane--resizable">One</div>
+              <div class="sk-resizable__pane" style="flex: 1">Two</div>
+            </div>
+
+            <div class="sk-scroll pg__lines" style="width: 16rem">
+              <p>Tags</p>
+              <p>v1.2.0-beta.50</p>
+              <p>v1.2.0-beta.49</p>
+              <p>v1.2.0-beta.48</p>
+              <p>v1.2.0-beta.47</p>
+              <p>v1.2.0-beta.46</p>
+              <p>v1.2.0-beta.45</p>
+              <p>v1.2.0-beta.44</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pg__block">
+          <h3 class="pg__block-title">Carousel · Aspect ratio</h3>
+          <div class="sk-carousel">
+            <div class="sk-card">
+              <div class="sk-aspect">16:9</div>
+              <div class="sk-card__title">Slide 1</div>
+            </div>
+            <div class="sk-card">
+              <div class="sk-aspect">16:9</div>
+              <div class="sk-card__title">Slide 2</div>
+            </div>
+            <div class="sk-card">
+              <div class="sk-aspect">16:9</div>
+              <div class="sk-card__title">Slide 3</div>
+            </div>
+            <div class="sk-card">
+              <div class="sk-aspect">16:9</div>
+              <div class="sk-card__title">Slide 4</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================= Data -->
+      <section class="pg__section" data-section="data">
+        <h2 class="pg__section-title">Data</h2>
+
+        <div class="pg__block">
+          <h3 class="pg__block-title">Progress · Alert · Empty · Item</h3>
+          <div class="pg__grid">
+            <div class="pg__block">
+              <div
+                class="sk-progress"
+                role="progressbar"
+                aria-valuenow="62"
+                aria-valuemin="0"
+                aria-valuemax="100"
+              >
+                <div class="sk-progress__bar" style="width: 62%"></div>
+              </div>
+              <div class="sk-alert">
+                <div class="sk-alert__title">Heads up!</div>
+                <div class="sk-alert__desc">You can add components to your app using the CLI.</div>
+              </div>
+              <div class="sk-alert sk-alert--destructive">
+                <div class="sk-alert__title">Error</div>
+                <div class="sk-alert__desc">Your session has expired. Please log in again.</div>
+              </div>
+            </div>
+            <div class="pg__block">
+              <div class="sk-empty">
+                <strong>No scenarios yet</strong>
+                <span>Create your first scenario to start planning.</span>
+                <button type="button" class="sk-btn sk-btn--sm">Create scenario</button>
+              </div>
+              <div class="sk-item">
+                <span class="sk-avatar sk-avatar--sm">P</span>
+                <div class="sk-item__body">
+                  <div class="sk-item__title">Pinus taeda — Block 12</div>
+                  <div class="sk-item__desc">Harvest scheduled for Q3 2027</div>
+                </div>
+                <button type="button" class="sk-btn sk-btn--ghost sk-btn--sm">Open</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pg__block">
+          <h3 class="pg__block-title">Table — {{ tableRows.length }} rows</h3>
+          <div class="sk-table-wrap">
+            <table class="sk-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Task</th>
+                  <th>Owner</th>
+                  <th>Status</th>
+                  <th>Progress</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (row of tableRows; track row.id) {
+                  <tr>
+                    <td>{{ row.id }}</td>
+                    <td>{{ row.name }}</td>
+                    <td>{{ row.owner }}</td>
+                    <td>
+                      <span class="sk-badge sk-badge--outline">{{ row.status }}</span>
+                    </td>
+                    <td style="width: 10rem">
+                      <div class="sk-progress">
+                        <div class="sk-progress__bar" [style.width.%]="row.progress"></div>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="pg__block">
+          <h3 class="pg__block-title">
+            Datagrid — {{ gridRows.length }} rows (scroll performance test, click a header to sort)
+          </h3>
+          <div class="sk-table-wrap sk-table-wrap--grid">
+            <table class="sk-table sk-table--dense">
+              <thead>
+                <tr>
+                  @for (column of gridColumns; track column.key) {
+                    <th [attr.aria-sort]="gridSortStates()[column.key]">
+                      <button type="button" class="sk-table__sort" (click)="sortGrid(column.key)">
+                        {{ column.label }}
+                      </button>
+                    </th>
+                  }
+                </tr>
+              </thead>
+              <tbody>
+                @for (row of sortedGridRows(); track row.id) {
+                  <tr>
+                    <td>{{ row.id }}</td>
+                    <td>{{ row.name }}</td>
+                    <td>{{ row.owner }}</td>
+                    <td>{{ row.status }}</td>
+                    <td>{{ row.progress }}%</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================ Composed screen -->
+      <section class="pg__section" data-section="composed">
+        <h2 class="pg__section-title">Composed screen</h2>
+        <p class="pg__muted">A fake app screen to judge the wireframe effect as a whole.</p>
+
+        <div class="pg__screen">
+          <nav class="sk-sidebar pg__screen-sidebar">
+            <span class="sk-sidebar__label">Plan</span>
+            <button type="button" class="sk-sidebar__item" aria-current="page">Dashboard</button>
+            <button type="button" class="sk-sidebar__item">Scenarios</button>
+            <button type="button" class="sk-sidebar__item">Reports</button>
+            <span class="sk-sidebar__label">Admin</span>
+            <button type="button" class="sk-sidebar__item">Users</button>
+          </nav>
+
+          <header class="pg__screen-header">
+            <ol class="sk-breadcrumb">
+              <li><a href="#">Plans</a></li>
+              <li aria-current="page">Dashboard</li>
+            </ol>
+            <div class="pg__row">
+              <input class="sk-input" placeholder="Search…" style="width: 12rem" />
+              <button type="button" class="sk-btn sk-btn--primary sk-btn--sm">New scenario</button>
+              <span class="sk-avatar sk-avatar--sm">UA</span>
+            </div>
+          </header>
+
+          <main class="pg__screen-main">
+            <div class="pg__screen-cards">
+              <div class="sk-card">
+                <div class="sk-card__desc">Area</div>
+                <div class="pg__stat">12.4k ha</div>
+              </div>
+              <div class="sk-card">
+                <div class="sk-card__desc">Scenarios</div>
+                <div class="pg__stat">8</div>
+              </div>
+              <div class="sk-card">
+                <div class="sk-card__desc">NPV</div>
+                <div class="pg__stat">+4.2%</div>
+              </div>
+            </div>
+            <div class="sk-table-wrap">
+              <table class="sk-table">
+                <thead>
+                  <tr>
+                    <th>Task</th>
+                    <th>Owner</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (row of composedRows; track row.id) {
+                    <tr>
+                      <td>{{ row.name }}</td>
+                      <td>{{ row.owner }}</td>
+                      <td>
+                        <span class="sk-badge sk-badge--outline">{{ row.status }}</span>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </main>
+        </div>
+      </section>
+    </div>
+  </div>
+</ng-template>

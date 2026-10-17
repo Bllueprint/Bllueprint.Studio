@@ -1,0 +1,11 @@
+/* Look comes from the shared `.sk-tabstrip*` classes (src/sketch-ui/styles/components.css). */
+:host {
+  display: block;
+  height: 100%;
+}
+
+.wtabs__trigger {
+  align-self: center;
+  margin-right: 0.35rem;
+  flex-shrink: 0;
+}

@@ -1,0 +1,255 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.pg {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ------------------------------------------------------------- Toolbar */
+.pg__toolbar {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1.4rem;
+  padding: 0.6rem 1rem;
+  z-index: 2;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 4px;
+    background-color: var(--sketch-stroke-muted);
+    mask: var(--sketch-mask-line-h) repeat-x center / 200px 4px;
+    pointer-events: none;
+  }
+}
+
+.pg__toolbar-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-right: 0.5rem;
+  transform: rotate(-1deg);
+}
+
+.pg__control {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.85rem;
+  white-space: nowrap;
+
+  .sk-select,
+  .sk-input {
+    width: auto;
+    height: 1.9rem;
+    font-size: 0.85rem;
+  }
+
+  sk-slider {
+    width: 7rem;
+  }
+}
+
+.pg__control-value {
+  min-width: 2.4rem;
+  color: var(--muted-foreground);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --------------------------------------------------------------- Body */
+.pg__body {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.pg__split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 100%;
+  min-height: 0;
+}
+
+.pg__split > .pg__canvas:first-child {
+  border-right: var(--sketch-width) dashed var(--sketch-stroke-muted);
+}
+
+.pg__canvas {
+  display: grid;
+  grid-template-columns: 11rem 1fr;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.pg__canvas-label {
+  grid-column: 1 / -1;
+  padding: 0.3rem 1rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+.pg__canvas--labelled {
+  grid-template-rows: auto 1fr;
+}
+
+.pg__anchors {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 1rem 0.6rem;
+  overflow: auto;
+}
+
+.pg__anchor {
+  padding: 0.35rem 0.7rem;
+  text-align: left;
+  font-size: 0.92rem;
+  border: var(--sketch-width-inner) solid transparent;
+  border-radius: var(--sketch-radius-sm);
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--sketch-stroke-muted);
+  }
+}
+
+.pg__sections {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  padding: 1rem 1.5rem 4rem;
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--sketch-stroke-muted) transparent;
+}
+
+/* ------------------------------------------------------------ Sections */
+.pg__section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  scroll-margin-top: 1rem;
+}
+
+.pg__section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  padding-bottom: 0.2rem;
+  border-bottom: var(--sketch-width) solid var(--sketch-stroke);
+}
+
+.pg__block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.pg__block-title {
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+.pg__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.pg__row--top {
+  align-items: flex-start;
+}
+
+.pg__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 1rem;
+}
+
+.pg__form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 1rem 1.4rem;
+  max-width: 44rem;
+}
+
+.pg__form-full {
+  grid-column: 1 / -1;
+}
+
+.pg__form-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.pg__muted {
+  color: var(--muted-foreground);
+  font-size: 0.85rem;
+}
+
+.pg__toasts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.pg__lines p + p {
+  margin-top: 0.4rem;
+}
+
+/* ----------------------------------------------------- Composed screen */
+.pg__screen {
+  display: grid;
+  grid-template-columns: 12rem 1fr;
+  grid-template-rows: auto 1fr;
+  gap: 1rem;
+  min-height: 26rem;
+  padding: 1rem;
+  border: var(--sketch-width) solid var(--sketch-stroke);
+  border-radius: var(--sketch-radius);
+  background-color: var(--card);
+}
+
+.pg__screen-sidebar {
+  grid-row: 1 / -1;
+  width: auto;
+}
+
+.pg__screen-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.pg__screen-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.pg__screen-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 0.8rem;
+}
+
+.pg__stat {
+  font-size: 1.8rem;
+  font-weight: 700;
+}

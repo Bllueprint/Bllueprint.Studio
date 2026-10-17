@@ -1,0 +1,155 @@
+/*
+ * Hand-drawn look on top of the generated Spartan helms.
+ *
+ * The helm files under src/sketch-ui/components are kept as generated (they are
+ * the diff reference for future Spartan updates). This file targets their
+ * `data-slot` / `data-sidebar` attributes and is intentionally UNLAYERED so it
+ * wins over the Tailwind utility classes the helms apply.
+ */
+
+/* ------------------------------------------------------------------ Sidebar */
+hlm-sidebar {
+  font-family: var(--sketch-font-active);
+}
+
+[data-slot='sidebar-container'][data-side='left'],
+[data-slot='sidebar-container'][data-side='right'] {
+  border-right-width: 0;
+  border-left-width: 0;
+}
+
+[data-slot='sidebar-inner'] {
+  position: relative;
+  background-color: var(--sidebar);
+  background-image: var(--sketch-paper-pattern);
+  background-size: var(--sketch-paper-pattern-size);
+}
+
+[data-slot='sidebar-inner']::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: -2px;
+  width: 4px;
+  background-color: var(--sketch-stroke-muted);
+  mask: var(--sketch-mask-line-v) repeat-y center / 4px 200px;
+  pointer-events: none;
+}
+
+[data-sidebar='group-label'] {
+  font-family: var(--sketch-font-active);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  border-radius: var(--sketch-radius-sm);
+}
+
+[data-sidebar='menu-button'] {
+  font-family: var(--sketch-font-active);
+  font-size: 0.95rem;
+  background-color: transparent;
+  border: var(--sketch-width-inner) solid transparent;
+  border-radius: var(--sketch-radius-sm);
+  transition:
+    border-color 0.12s,
+    background-color 0.12s;
+}
+
+[data-sidebar='menu-button']:hover {
+  background-color: transparent;
+  background-image: var(--sketch-hatch-accent-light);
+  border-color: var(--sketch-stroke-muted);
+}
+
+[data-sidebar='menu-button'][data-active='true'] {
+  background-color: var(--sketch-accent-soft);
+  border-color: var(--sketch-stroke);
+  font-weight: 700;
+}
+
+[data-sidebar='menu-button'][data-active='true']:hover {
+  background-color: var(--sketch-accent-soft);
+}
+
+[data-sidebar='menu-button'][data-active='true'] ng-icon {
+  color: var(--sketch-accent);
+}
+
+[data-sidebar='menu-button']:focus-visible,
+[data-slot='sidebar-trigger']:focus-visible,
+[data-slot='button']:focus-visible {
+  outline: var(--sketch-width) dashed var(--ring);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+[data-sidebar='menu-button'] ng-icon {
+  font-size: 1.1rem;
+}
+
+[data-sidebar='rail']::after {
+  background-color: transparent;
+  width: 4px;
+  mask: var(--sketch-mask-line-v) repeat-y center / 4px 200px;
+}
+
+[data-sidebar='rail']:hover::after {
+  background-color: var(--sketch-accent);
+}
+
+[data-slot='sidebar-separator'],
+[data-slot='separator'][data-orientation='horizontal'] {
+  height: 4px;
+  background-color: var(--sketch-stroke-muted);
+  mask: var(--sketch-mask-line-h) repeat-x center / 200px 4px;
+}
+
+[data-slot='separator'][data-orientation='vertical'] {
+  width: 4px;
+  background-color: var(--sketch-stroke-muted);
+  mask: var(--sketch-mask-line-v) repeat-y center / 4px 200px;
+}
+
+/* ------------------------------------------------------------------- Button */
+[data-slot='button'] {
+  font-family: var(--sketch-font-active);
+  border-radius: var(--sketch-radius-sm);
+}
+
+/* The sidebar trigger is a ghost icon button: outline only on hover */
+[data-slot='sidebar-trigger'] {
+  color: var(--foreground);
+  border: var(--sketch-width-inner) solid transparent;
+  border-radius: var(--sketch-radius-round);
+  background-color: transparent;
+}
+
+[data-slot='sidebar-trigger']:hover {
+  background-color: transparent;
+  background-image: var(--sketch-hatch-accent-light);
+  border-color: var(--sketch-stroke-muted);
+}
+
+/* ------------------------------------------------------------------ Tooltip */
+.cdk-overlay-container [role='tooltip'] {
+  font-family: var(--sketch-font-active);
+  border-radius: var(--sketch-radius-sm);
+  transform: rotate(-1deg);
+}
+
+/* --------------------------------------------------------- Input / Skeleton */
+[data-slot='input'] {
+  font-family: var(--sketch-font-active);
+  border: var(--sketch-width-inner) solid var(--sketch-stroke);
+  border-radius: var(--sketch-radius-sm);
+  background-color: transparent;
+}
+
+[data-slot='skeleton'] {
+  background-color: transparent;
+  background-image: var(--sketch-hatch);
+  border: var(--sketch-width-inner) dashed var(--sketch-stroke-muted);
+  border-radius: var(--sketch-radius-sm);
+}

@@ -1,8 +1,6 @@
 /**
- * Type declaration for the Electron IPC bridge exposed by the preload script.
- *
- * Place this file at `src/electron.d.ts` inside `bllueprint-frontend`.
- * TypeScript will pick it up automatically — no changes to tsconfig required.
+ * Type declaration for the Electron IPC bridge exposed by the preload script
+ * (`../bllueprint-desktop/preload`). Keep both sides in sync.
  *
  * `bllueprintApi` is `undefined` when the Angular app runs in a regular
  * browser (outside Electron), so always guard with an optional check:

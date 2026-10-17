@@ -1,118 +1,39 @@
-.sidebar {
-  display: flex;
-  flex-direction: column;
-  width: 220px;
-  min-width: 220px;
-  height: 100%;
-  background: #1f1f1f;
-  border-right: 1px solid #2d2d2d;
+:host {
+  display: contents;
+}
+
+.app-sidebar {
   user-select: none;
-  font-family: 'Inter', sans-serif; 
 }
 
-.sidebar__logo {
+.app-sidebar__brand {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 16px 16px 14px;
-  border-bottom: 1px solid #2d2d2d;
+  gap: 0.6rem;
+  height: 2.5rem;
+  padding: 0 0.35rem;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
-.sidebar__logo-text {
-  font-size: 13px;
-  font-weight: 600;
-  color: #e0e0e0;
+.app-sidebar__logo {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--sidebar-foreground);
+  transform: rotate(-3deg);
+}
+
+.app-sidebar__name {
+  font-family: var(--sketch-font-active);
+  font-size: 1.15rem;
+  font-weight: 700;
   letter-spacing: 0.02em;
+  color: var(--sidebar-foreground);
+  transition: opacity 0.15s;
 }
 
-.sidebar__section {
-  flex: 1;
-  padding: 16px 0 8px;
-}
-
-.sidebar__section-label {
-  display: block;
-  padding: 0 16px 8px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #858585;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.sidebar__nav-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-  padding: 7px 16px;
-  background: transparent;
-  border: none;
-  cursor: default;
-  color: #cccccc;
-  font-size: 18px;
-  font-family: inherit;
-  text-align: left;
-  transition:
-    background 0.12s,
-    color 0.12s;
-}
-
-.sidebar__nav-item:hover {
-  background: #2a2d2e;
-  color: #ffffff;
-}
-
-.sidebar__nav-item:active {
-  background: #094771;
-  color: #ffffff;
-}
-
-.sidebar__nav-icon {
-  display: flex;
-  align-items: center;
-  color: #858585;
-  transition: color 0.12s;
-  svg {
-    width: 28px;
-    height: 28px;
-  }
-}
-
-.sidebar__nav-item:hover .sidebar__nav-icon {
-  color: #cccccc;
-}
-
-.sidebar__nav-label {
-  font-weight: 400;
-}
-
-.sidebar__footer {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 4px;
-  padding: 10px 12px;
-  border-top: 1px solid #2d2d2d;
-}
-
-.sidebar__footer-item {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  color: #858585;
-  cursor: default;
-  border: none;
-  background: transparent;
-  border-radius: 4px;
-  transition:
-    color 0.12s,
-    background 0.12s;
-}
-
-.sidebar__footer-item:hover {
-  color: #cccccc;
-  background: #2a2d2e;
+/* Collapsed to icons: hide the wordmark, keep the logo centered */
+:host ::ng-deep [data-collapsible='icon'] .app-sidebar__name {
+  opacity: 0;
+  width: 0;
 }

@@ -1,0 +1,38 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.workspace {
+  display: grid;
+  grid-template-rows: 38px 1fr;
+  height: 100%;
+  overflow: hidden;
+}
+
+.workspace__tabs {
+  display: block;
+  min-width: 0;
+}
+
+.workspace__content {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.workspace__pane {
+  position: absolute;
+  inset: 0;
+  display: none;
+  overflow: hidden;
+}
+
+.workspace__pane--active {
+  display: block;
+}
+
+.workspace__pane > * {
+  display: block;
+  height: 100%;
+}

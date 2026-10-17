@@ -1,0 +1,54 @@
+/* Theme "paper" — light, provisional palette (placeholder until the final colors are decided). */
+[data-theme='paper'] {
+  color-scheme: light;
+
+  --radius: 0.625rem;
+
+  --background: oklch(0.985 0.008 90);
+  --foreground: oklch(0.28 0.025 260);
+
+  --card: oklch(0.995 0.005 90);
+  --card-foreground: oklch(0.28 0.025 260);
+  --popover: oklch(0.995 0.005 90);
+  --popover-foreground: oklch(0.28 0.025 260);
+
+  --primary: oklch(0.34 0.03 260);
+  --primary-foreground: oklch(0.985 0.008 90);
+  --secondary: oklch(0.93 0.012 90);
+  --secondary-foreground: oklch(0.28 0.025 260);
+  --muted: oklch(0.94 0.012 90);
+  --muted-foreground: oklch(0.52 0.02 260);
+  --accent: oklch(0.92 0.03 85);
+  --accent-foreground: oklch(0.28 0.025 260);
+  /* cooler carmine so it never reads as the orange accent */
+  --destructive: oklch(0.52 0.2 15);
+
+  --border: oklch(0.8 0.015 80);
+  --input: oklch(0.8 0.015 80);
+  --ring: var(--sketch-accent);
+
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+
+  --sidebar: oklch(0.965 0.012 90);
+  --sidebar-foreground: oklch(0.28 0.025 260);
+  --sidebar-primary: oklch(0.34 0.03 260);
+  --sidebar-primary-foreground: oklch(0.985 0.008 90);
+  --sidebar-accent: oklch(0.92 0.03 85);
+  --sidebar-accent-foreground: oklch(0.28 0.025 260);
+  --sidebar-border: oklch(0.8 0.015 80);
+  --sidebar-ring: var(--sketch-accent);
+
+  /* sketch — accent (orange). Two tones on light paper: a burnt orange that
+     passes contrast for text/focus, and a vivid one for fills. */
+  --sketch-accent: oklch(0.55 0.16 45);
+  --sketch-accent-fill: oklch(0.72 0.17 50);
+  --sketch-paper-pattern: radial-gradient(
+    color-mix(in oklab, var(--foreground) 12%, transparent) 1px,
+    transparent 1px
+  );
+  --sketch-paper-pattern-size: 20px 20px;
+}

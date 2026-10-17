@@ -1,0 +1,60 @@
+/*
+ * Theme "navy" — dark. Same chalk-on-blue family as "blueprint", but on a
+ * slightly darker, solid blue with the dotted paper pattern instead of the grid.
+ */
+[data-theme='navy'] {
+  color-scheme: dark;
+
+  --radius: 0.625rem;
+
+  --background: oklch(0.25 0.06 255);
+  --foreground: oklch(0.95 0.012 90);
+
+  --card: oklch(0.28 0.06 255);
+  --card-foreground: oklch(0.95 0.012 90);
+  --popover: oklch(0.25 0.06 255);
+  --popover-foreground: oklch(0.95 0.012 90);
+
+  --primary: oklch(0.92 0.02 90);
+  --primary-foreground: oklch(0.25 0.06 255);
+  --secondary: oklch(0.33 0.06 255);
+  --secondary-foreground: oklch(0.95 0.012 90);
+  --muted: oklch(0.31 0.055 255);
+  --muted-foreground: oklch(0.78 0.02 90);
+  --accent: oklch(0.37 0.06 255);
+  --accent-foreground: oklch(0.97 0.01 90);
+  /* cooler carmine so it never reads as the orange accent */
+  --destructive: oklch(0.74 0.17 12);
+
+  --border: oklch(0.95 0.012 90 / 35%);
+  --input: oklch(0.95 0.012 90 / 40%);
+  --ring: var(--sketch-accent);
+
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+
+  --sidebar: oklch(0.22 0.055 255);
+  --sidebar-foreground: oklch(0.95 0.012 90);
+  --sidebar-primary: oklch(0.92 0.02 90);
+  --sidebar-primary-foreground: oklch(0.25 0.06 255);
+  --sidebar-accent: oklch(0.33 0.06 255);
+  --sidebar-accent-foreground: oklch(0.97 0.01 90);
+  --sidebar-border: oklch(0.95 0.012 90 / 35%);
+  --sidebar-ring: var(--sketch-accent);
+
+  /* sketch — accent (orange): same marker tone as blueprint. */
+  --sketch-accent: oklch(0.78 0.15 55);
+  --sketch-accent-fill: oklch(0.78 0.15 55);
+  /* dotted paper (like "paper"), no grid */
+  --sketch-paper-pattern: radial-gradient(
+    color-mix(in oklab, var(--foreground) 14%, transparent) 1px,
+    transparent 1px
+  );
+  --sketch-paper-pattern-size: 20px 20px;
+
+  /* The 22% default tint looks greyish on the dark blue paper; use a stronger one. */
+  --sketch-accent-soft: color-mix(in oklab, var(--sketch-accent-fill) 30%, transparent);
+}

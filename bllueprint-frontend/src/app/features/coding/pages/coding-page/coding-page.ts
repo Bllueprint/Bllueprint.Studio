@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
-import { WorkbenchComponent } from '../../../../core/layout/workbench/workbench';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { WorkbenchComponent } from '../../components/workbench/workbench';
 
 @Component({
   selector: 'app-coding-page',
-  standalone: true,
   imports: [WorkbenchComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './coding-page.html',
   styleUrl: './coding-page.scss',
 })

@@ -1,23 +1,27 @@
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { App } from './app';
 
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
+      providers: [provideRouter([])],
     }).compileComponents();
   });
 
-  it('should create the app', () => {
+  it('creates the app', () => {
     const fixture = TestBed.createComponent(App);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+
+    expect(fixture.componentInstance).toBeTruthy();
   });
 
-  it('should render title', async () => {
-    const fixture = TestBed.createComponent(App);
-    await fixture.whenStable();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, bllueprint-frontend');
+  it('applies the sketch theme attributes on <html> at startup', () => {
+    TestBed.createComponent(App).detectChanges();
+
+    const root = document.documentElement;
+
+    expect(root.getAttribute('data-theme')).toBeTruthy();
+    expect(['light', 'dark']).toContain(root.getAttribute('data-scheme'));
   });
 });

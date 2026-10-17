@@ -1,0 +1,171 @@
+/*
+ * Shared tab strip (`.sk-tabstrip*`) used by the workspace tabs and by the
+ * editor's file tabs, so both read as the same hand-drawn chrome.
+ */
+@layer components {
+  .sk-tabstrip {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    gap: 0.2rem;
+    height: 38px;
+    padding: 0 0.5rem;
+    background-color: var(--sidebar);
+    color: var(--foreground);
+    font-family: var(--sketch-font-active);
+    user-select: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+  }
+
+  .sk-tabstrip::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* hand-drawn baseline under the tabs */
+  .sk-tabstrip::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 4px;
+    background-color: var(--sketch-stroke-muted);
+    mask: var(--sketch-mask-line-h) repeat-x center / 200px 4px;
+    pointer-events: none;
+  }
+
+  /* Variant that sits on the paper itself (editor file tabs) */
+  .sk-tabstrip--paper {
+    background-color: transparent;
+  }
+
+  .sk-tabstrip__tab {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    height: 31px;
+    min-width: 90px;
+    max-width: 180px;
+    margin-bottom: 3px;
+    padding: 0 0.4rem 0 0.7rem;
+    font-size: 0.92rem;
+    color: var(--muted-foreground);
+    border: var(--sketch-width-inner) solid transparent;
+    border-radius: var(--sketch-radius-sm);
+    cursor: default;
+    flex-shrink: 0;
+    transition:
+      border-color 0.12s,
+      color 0.12s;
+  }
+
+  .sk-tabstrip__tab:hover {
+    color: var(--foreground);
+    border-color: var(--sketch-stroke-muted);
+    background-image: var(--sketch-hatch-accent-light);
+  }
+
+  .sk-tabstrip__tab:focus-visible {
+    outline: var(--sketch-width) dashed var(--ring);
+    outline-offset: 1px;
+  }
+
+  .sk-tabstrip__tab--active {
+    position: relative;
+    color: var(--foreground);
+    border-color: var(--sketch-stroke);
+    background-color: var(--sketch-accent-soft);
+    font-weight: 700;
+  }
+
+  /* marker underline */
+  .sk-tabstrip__tab--active::after {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 0.4rem;
+    right: 0.4rem;
+    bottom: -1px;
+    height: 4px;
+    background-color: var(--sketch-accent);
+    mask: var(--sketch-mask-line-h) repeat-x center / 200px 4px;
+    pointer-events: none;
+  }
+
+  .sk-tabstrip__tab--active .sk-tabstrip__icon {
+    color: var(--sketch-accent);
+  }
+
+  .sk-tabstrip__icon {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+  }
+
+  .sk-tabstrip__title {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  /* unsaved-changes marker */
+  .sk-tabstrip__dot {
+    width: 7px;
+    height: 7px;
+    background-color: var(--sketch-stroke);
+    border-radius: var(--sketch-radius-round);
+    flex-shrink: 0;
+  }
+
+  .sk-tabstrip__close {
+    position: relative;
+    display: inline-block;
+    width: 1.2rem;
+    height: 1.2rem;
+    padding: 0;
+    margin: 0 0 0 0.1rem;
+    font: inherit;
+    background: transparent;
+    border: var(--sketch-width-inner) solid transparent;
+    border-radius: var(--sketch-radius-round);
+    cursor: default;
+    flex-shrink: 0;
+    opacity: 0;
+    transition:
+      opacity 0.1s,
+      border-color 0.1s;
+  }
+
+  .sk-tabstrip__close::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: var(--foreground);
+    mask: var(--sketch-mask-x) center / 65% no-repeat;
+  }
+
+  .sk-tabstrip__close:hover {
+    border-color: var(--sketch-stroke-muted);
+  }
+
+  .sk-tabstrip__tab:hover .sk-tabstrip__close,
+  .sk-tabstrip__tab--active .sk-tabstrip__close,
+  .sk-tabstrip__close:focus-visible {
+    opacity: 1;
+  }
+
+  .sk-tabstrip__empty {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 0 0.6rem;
+    color: var(--muted-foreground);
+    font-size: 0.85rem;
+    font-style: italic;
+  }
+}

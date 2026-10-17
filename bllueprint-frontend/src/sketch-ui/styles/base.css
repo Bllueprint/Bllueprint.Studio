@@ -1,0 +1,71 @@
+/*
+ * Scoped reset (replaces Tailwind preflight, which is intentionally not loaded).
+ *
+ * Applies only inside: the Spartan sidebar, the sidebar trigger button,
+ * CDK overlays (tooltips / sheets) and any `.sketch-root` surface.
+ * Everything else (editor chrome, Monaco) is untouched.
+ */
+@layer base {
+  :where(hlm-sidebar, [data-slot='sidebar-trigger'], .cdk-overlay-container, .sketch-root),
+  :where(hlm-sidebar, [data-slot='sidebar-trigger'], .cdk-overlay-container, .sketch-root)
+    :where(*, *::before, *::after) {
+    box-sizing: border-box;
+    border: 0 solid var(--border);
+    outline-color: color-mix(in oklab, var(--ring) 50%, transparent);
+    margin: 0;
+    padding: 0;
+  }
+
+  :where(hlm-sidebar, [data-slot='sidebar-trigger'], .cdk-overlay-container, .sketch-root)
+    :where(button, input, select, textarea, summary) {
+    font: inherit;
+    color: inherit;
+    letter-spacing: inherit;
+    background-color: transparent;
+    border-radius: 0;
+  }
+
+  :where(hlm-sidebar, .cdk-overlay-container, .sketch-root) :where(ul, ol) {
+    list-style: none;
+  }
+
+  :where(hlm-sidebar, .cdk-overlay-container, .sketch-root) :where(h1, h2, h3, h4, h5, h6) {
+    font-size: inherit;
+    font-weight: inherit;
+  }
+
+  :where(hlm-sidebar, .cdk-overlay-container, .sketch-root) :where(svg, ng-icon) {
+    display: inline-block;
+    vertical-align: middle;
+    flex-shrink: 0;
+  }
+
+  :where(hlm-sidebar, .cdk-overlay-container, .sketch-root) :where(a) {
+    color: inherit;
+    text-decoration: inherit;
+  }
+
+  :where(hlm-sidebar, .cdk-overlay-container, .sketch-root) :where(table) {
+    border-collapse: collapse;
+    border-spacing: 0;
+    text-indent: 0;
+  }
+
+  :where(hlm-sidebar, .cdk-overlay-container, .sketch-root) :where(summary) {
+    list-style: none;
+  }
+
+  :where(hlm-sidebar, .cdk-overlay-container, .sketch-root)
+    :where(summary)::-webkit-details-marker {
+    display: none;
+  }
+
+  :where([data-slot='sidebar-trigger'], .sketch-root)
+    :where(button, [role='button'], summary, select) {
+    cursor: pointer;
+  }
+
+  :where(.sketch-root) :where(:disabled) {
+    cursor: default;
+  }
+}

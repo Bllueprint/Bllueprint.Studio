@@ -1,0 +1,104 @@
+/*
+ * Comic Mono — monospace with a hand-drawn feel, used by the code editor when
+ * the "sketch code font" preference is on. Self-hosted (public/fonts/comic-mono,
+ * MIT) so the desktop app works offline.
+ */
+@font-face {
+  font-family: 'Comic Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/comic-mono/ComicMono.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Comic Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/comic-mono/ComicMono-Bold.ttf') format('truetype');
+}
+
+/*
+ * Shape tokens. Colors are NEVER defined here: every color token only
+ * references the semantic variables that each theme provides (see themes/).
+ */
+:root {
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
+    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-mono: 'Fira Code', 'Cascadia Code', Consolas, 'Courier New', monospace;
+  --sketch-font-mono: 'Comic Mono', var(--font-mono);
+
+  /* Stroke */
+  --sketch-width: 2px;
+  --sketch-width-inner: 1.5px;
+  --sketch-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  --sketch-radius-sm: 15px 255px 15px 225px / 225px 15px 255px 15px;
+  --sketch-radius-round: 50% 45% 55% 48% / 48% 55% 45% 52%;
+  --sketch-radius-pill: 60% 40% 55% 45% / 50% 60% 40% 50%;
+
+  /* Handwriting. "Segoe Print"/"Bradley Hand" are local fallbacks so the
+     desktop app looks right offline; the Google fonts can be self-hosted later. */
+  --sketch-font:
+    'Architects Daughter', 'Patrick Hand', 'Caveat', 'Segoe Print', 'Bradley Hand', 'Comic Sans MS',
+    cursive;
+  --sketch-font-active: var(--sketch-font);
+
+  /* Reserved for the (future) Rough.js directive; nothing reads them today */
+  --sketch-roughness: 1.2;
+  --sketch-bowing: 1;
+
+  /* Hand-drawn line masks. SVG in a data: URI cannot see CSS variables, so the
+     SVG only defines the SHAPE (mask) and the color comes from background-color. */
+  --sketch-mask-line-h: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 4' preserveAspectRatio='none'%3E%3Cpath d='M0 2 C 20 1, 40 3.2, 60 2 S 100 0.9, 120 2.1 S 160 3.1, 180 1.6 S 195 2.3, 200 2' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");
+  --sketch-mask-line-v: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 200' preserveAspectRatio='none'%3E%3Cpath d='M2 0 C 1 20, 3.2 40, 2 60 S 0.9 100, 2.1 120 S 3.1 160, 1.6 180 S 2.3 195, 2 200' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");
+  --sketch-mask-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2.8 8.6 L6.4 12.2 L13.4 3.6' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --sketch-mask-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.2 5.8 L8 10.6 L12.8 5.6' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --sketch-mask-x: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 3.2 L12.6 12.7 M12.4 3.4 L3.3 12.5' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E");
+
+  /* Ink hatch: "filled" wireframe surfaces without text (badge default, skeleton) */
+  --sketch-hatch: repeating-linear-gradient(-45deg, var(--sketch-fill) 0 2px, transparent 2px 7px);
+}
+
+/*
+ * Ink + accent tokens derive from the theme colors. They are (re)declared on
+ * every element that carries a theme, not only on :root: a `var()` inside a
+ * custom property resolves where the property is DECLARED, so declaring these
+ * only on :root would freeze them to the <html> theme and break nested themes
+ * (playground "all themes side by side").
+ */
+:root,
+[data-theme] {
+  --sketch-stroke: var(--foreground);
+  --sketch-stroke-muted: color-mix(in oklab, var(--foreground) 38%, transparent);
+  --sketch-stroke-faint: color-mix(in oklab, var(--foreground) 16%, transparent);
+  --sketch-paper: var(--background);
+  --sketch-fill: color-mix(in oklab, var(--foreground) 9%, transparent);
+
+  /*
+   * Accent (one "marker" color). Themes define --sketch-accent (text-safe) and
+   * --sketch-accent-fill (vivid). How it is used, app-wide:
+   *  - active/selected  → --sketch-accent-soft (flat tint; text stays ink)
+   *  - hover            → --sketch-hatch-accent-light (light hatch texture)
+   *  - primary button   → solid --sketch-accent with --sketch-accent-contrast text
+   *  - no-text fills    → --sketch-hatch-accent (progress bar, switch track)
+   */
+  --sketch-accent-soft: color-mix(in oklab, var(--sketch-accent-fill) 22%, transparent);
+  --sketch-accent-contrast: var(--background);
+  --sketch-hatch-accent: repeating-linear-gradient(
+    -45deg,
+    color-mix(in oklab, var(--sketch-accent-fill) 55%, transparent) 0 2px,
+    transparent 2px 7px
+  );
+  --sketch-hatch-accent-light: repeating-linear-gradient(
+    -45deg,
+    color-mix(in oklab, var(--sketch-accent-fill) 30%, transparent) 0 1px,
+    transparent 1px 8px
+  );
+  --sketch-primary-hover: color-mix(in oklab, var(--sketch-accent) 85%, var(--foreground));
+}
+
+/* Playground / global toggles (set on <html> by SketchConfigService) */
+:root.sketch-font-off {
+  --sketch-font-active: var(--font-sans);
+}

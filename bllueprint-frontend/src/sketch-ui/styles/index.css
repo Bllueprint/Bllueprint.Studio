@@ -1,0 +1,30 @@
+/*
+ * sketch-ui — single stylesheet entry (registered in angular.json "styles").
+ *
+ * Tailwind v4 is loaded WITHOUT preflight on purpose: the existing editor UI
+ * (VS Code-like chrome + Monaco) is styled with plain SCSS and must not be
+ * touched by a global reset. A scoped reset for Spartan helms and the sketch
+ * playground lives in ./base.css instead.
+ */
+@layer theme, base, components, utilities;
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css';
+
+@import '@spartan-ng/brain/hlm-tailwind-preset.css';
+
+/* Shape tokens (identical in every theme) */
+@import './tokens.css';
+
+/* Themes: each file fills the contract in ./themes/_contract.md */
+@import './themes/paper.css';
+@import './themes/blueprint.css';
+@import './themes/navy.css';
+
+/* Scoped reset + sketch utilities + hardcoded sketch components */
+@import './base.css';
+@import './sketch.css';
+@import './components.css';
+@import './tabstrip.css';
+
+/* Hand-drawn look applied on top of the generated Spartan helms (by data-slot) */
+@import './spartan-sketch.css';
